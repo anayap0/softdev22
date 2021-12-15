@@ -1,0 +1,103 @@
+2021-12-15 08:51:59,649 INFO: Attendance startup [in C:\Users\anaya.DESKTOP-7D019FO\attendance_app\app\__init__.py:74]
+2021-12-15 08:52:02,547 ERROR: Exception on /auth/login [GET] [in c:\venvs\p3.9\lib\site-packages\flask\app.py:1454]
+Traceback (most recent call last):
+  File "c:\venvs\p3.9\lib\site-packages\flask\app.py", line 2070, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\venvs\p3.9\lib\site-packages\flask\app.py", line 1515, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\venvs\p3.9\lib\site-packages\flask\app.py", line 1513, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\venvs\p3.9\lib\site-packages\flask\app.py", line 1499, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "C:\Users\anaya.DESKTOP-7D019FO\attendance_app\app\auth\routes.py", line 28, in login
+    return render_template('auth/login.html', title=_('Sign In'), form=form)
+  File "c:\venvs\p3.9\lib\site-packages\flask\templating.py", line 147, in render_template
+    return _render(
+  File "c:\venvs\p3.9\lib\site-packages\flask\templating.py", line 128, in _render
+    rv = template.render(context)
+  File "c:\venvs\p3.9\lib\site-packages\jinja2\environment.py", line 1304, in render
+    self.environment.handle_exception()
+  File "c:\venvs\p3.9\lib\site-packages\jinja2\environment.py", line 925, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\anaya.DESKTOP-7D019FO\attendance_app\app\templates\auth\login.html", line 2, in top-level template code
+    {% import 'bootstrap/wtf.html' as wtf %}
+  File "C:\Users\anaya.DESKTOP-7D019FO\attendance_app\app\templates\base.html", line 1, in top-level template code
+    {% extends 'bootstrap/base.html' %}
+  File "c:\venvs\p3.9\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 1, in top-level template code
+    {% block doc -%}
+  File "c:\venvs\p3.9\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 4, in block 'doc'
+    {%- block html %}
+  File "c:\venvs\p3.9\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 20, in block 'html'
+    {% block body -%}
+  File "c:\venvs\p3.9\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 21, in block 'body'
+    {% block navbar %}
+  File "C:\Users\anaya.DESKTOP-7D019FO\attendance_app\app\templates\base.html", line 22, in block 'navbar'
+    <li><a href="{{ url_for('main.explore') }}">{{ _('Explore') }}</a></li>
+  File "c:\venvs\p3.9\lib\site-packages\flask\helpers.py", line 338, in url_for
+    return appctx.app.handle_url_build_error(error, endpoint, values)
+  File "c:\venvs\p3.9\lib\site-packages\flask\helpers.py", line 325, in url_for
+    rv = url_adapter.build(
+  File "c:\venvs\p3.9\lib\site-packages\werkzeug\routing.py", line 2305, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.BuildError: Could not build url for endpoint 'main.explore'. Did you mean 'main.user' instead?
+2021-12-15 08:52:02,835 ERROR: Exception on /favicon.ico [GET] [in c:\venvs\p3.9\lib\site-packages\flask\app.py:1454]
+Traceback (most recent call last):
+  File "c:\venvs\p3.9\lib\site-packages\flask\app.py", line 1513, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\venvs\p3.9\lib\site-packages\flask\app.py", line 1489, in dispatch_request
+    self.raise_routing_exception(req)
+  File "c:\venvs\p3.9\lib\site-packages\flask\app.py", line 1471, in raise_routing_exception
+    raise request.routing_exception  # type: ignore
+  File "c:\venvs\p3.9\lib\site-packages\flask\ctx.py", line 367, in match_request
+    result = self.url_adapter.match(return_rule=True)  # type: ignore
+  File "c:\venvs\p3.9\lib\site-packages\werkzeug\routing.py", line 2032, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\venvs\p3.9\lib\site-packages\flask\app.py", line 2070, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\venvs\p3.9\lib\site-packages\flask\app.py", line 1515, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\venvs\p3.9\lib\site-packages\flask\app.py", line 1383, in handle_user_exception
+    return self.handle_http_exception(e)
+  File "c:\venvs\p3.9\lib\site-packages\flask\app.py", line 1323, in handle_http_exception
+    return self.ensure_sync(handler)(e)
+  File "C:\Users\anaya.DESKTOP-7D019FO\attendance_app\app\errors\handlers.py", line 8, in not_found_error
+    return render_template('errors/404.html'), 404
+  File "c:\venvs\p3.9\lib\site-packages\flask\templating.py", line 147, in render_template
+    return _render(
+  File "c:\venvs\p3.9\lib\site-packages\flask\templating.py", line 128, in _render
+    rv = template.render(context)
+  File "c:\venvs\p3.9\lib\site-packages\jinja2\environment.py", line 1304, in render
+    self.environment.handle_exception()
+  File "c:\venvs\p3.9\lib\site-packages\jinja2\environment.py", line 925, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\anaya.DESKTOP-7D019FO\attendance_app\app\templates\errors\404.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "C:\Users\anaya.DESKTOP-7D019FO\attendance_app\app\templates\base.html", line 1, in top-level template code
+    {% extends 'bootstrap/base.html' %}
+  File "c:\venvs\p3.9\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 1, in top-level template code
+    {% block doc -%}
+  File "c:\venvs\p3.9\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 4, in block 'doc'
+    {%- block html %}
+  File "c:\venvs\p3.9\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 20, in block 'html'
+    {% block body -%}
+  File "c:\venvs\p3.9\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 21, in block 'body'
+    {% block navbar %}
+  File "C:\Users\anaya.DESKTOP-7D019FO\attendance_app\app\templates\base.html", line 22, in block 'navbar'
+    <li><a href="{{ url_for('main.explore') }}">{{ _('Explore') }}</a></li>
+  File "c:\venvs\p3.9\lib\site-packages\flask\helpers.py", line 338, in url_for
+    return appctx.app.handle_url_build_error(error, endpoint, values)
+  File "c:\venvs\p3.9\lib\site-packages\flask\helpers.py", line 325, in url_for
+    rv = url_adapter.build(
+  File "c:\venvs\p3.9\lib\site-packages\werkzeug\routing.py", line 2305, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.BuildError: Could not build url for endpoint 'main.explore'. Did you mean 'main.user' instead?
+2021-12-15 08:52:48,430 INFO: Attendance startup [in C:\Users\anaya.DESKTOP-7D019FO\attendance_app\app\__init__.py:74]
+2021-12-15 08:53:45,797 INFO: Attendance startup [in C:\Users\anaya.DESKTOP-7D019FO\attendance_app\app\__init__.py:74]
+2021-12-15 08:54:16,432 INFO: Attendance startup [in C:\Users\anaya.DESKTOP-7D019FO\attendance_app\app\__init__.py:74]
+2021-12-15 08:54:54,954 INFO: Attendance startup [in C:\Users\anaya.DESKTOP-7D019FO\attendance_app\app\__init__.py:74]
+2021-12-15 08:55:40,949 INFO: Attendance startup [in C:\Users\anaya.DESKTOP-7D019FO\attendance_app\app\__init__.py:74]
