@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, url_for, request, g, \
     jsonify, current_app
 from flask_login import current_user, login_required
 from flask_babel import _, get_locale
-from langdetect import detect, LangDetectException
+# from langdetect import detect, LangDetectException
 from app import db
 from app.main.forms import EditProfileForm
 from app.models import User
