@@ -1,0 +1,151 @@
+
+<link href="/static/loginstyle.css" rel="stylesheet" type="text/css">
+<head>
+<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
+      {% if error %}
+      <script>
+        function remove(el) {
+          var elem = document.getElementById("delete");
+          elem.remove()
+        }
+      </script>
+         <div class="modal" id="delete">
+            <p class="message">{{ error }}</p>
+            <div class="options">
+              <button class="bttn" onclick="remove();">Understood.</button>
+            </div>
+          </div>
+      <style>
+        html {
+          font-size: 18px;
+        }
+        @keyframes slide {
+          from {
+            background-position: 0 0;
+          }
+        
+          to {
+            background-position: -120px 60px;
+          }
+        }
+        
+        .modal {
+          font-family: monospace, serif;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          width: auto;
+          display: inline-flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 1.6rem 3rem;
+          border: 3px solid black;
+          border-radius: 5px;
+          background: #383838;
+          box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+        .message {
+          font-family: monospace, serif;
+          font-size:1.1rem;
+          font-color: black;
+          margin-bottom: 1.6rem;
+          margin-top: 0;
+        }
+        .bttn {
+          font-color: black;
+          color:inherit;
+          font-family: monospace, serif;
+          font-size: inherit;
+          background: gray;
+          padding: 0.3rem 3.4rem;
+          border: 3px solid black;
+          margin-right: 2.6rem;
+          box-shadow: 0 0 0 black;
+          transition: all 0.2s;
+        }
+        
+        .bttn:last-child {
+          margin: 0;
+        }
+        
+        .bttn:hover {
+          box-shadow: 0.4rem 0.4rem 0 black;
+          transform: translate(-0.4rem, -0.4rem);
+        }
+        
+        .bttn:active {
+          box-shadow: 0 0 0 black;
+          transform: translate(0, 0);
+        }
+        
+        .options {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+        }
+
+      </style>
+      {% endif %}
+</head>
+
+
+
+<form autocomplete='off' class='form' action='' method='post'>
+  <div class='control'>
+    <h1>
+      Sign In
+    </h1>
+  </div>
+  <div class='control block-cube block-input'>
+    <input type="text" placeholder="Username" name="username" value="{{
+          request.form.username }}">
+    <div class='bg-top'>
+      <div class='bg-inner'></div>
+    </div>
+    <div class='bg-right'>
+      <div class='bg-inner'></div>
+    </div>
+    <div class='bg'>
+      <div class='bg-inner'></div>
+    </div>
+  </div>
+  <div class='control block-cube block-input'>
+    <input type="password" placeholder="Password" name="password" value="{{
+          request.form.password }}">
+    <div class='bg-top'>
+      <div class='bg-inner'></div>
+    </div>
+    <div class='bg-right'>
+      <div class='bg-inner'></div>
+    </div>
+    <div class='bg'>
+      <div class='bg-inner'></div>
+    </div>
+  </div>
+  <button class='btn block-cube block-cube-hover' type='button'>
+    <div class='bg-top'>
+      <div class='bg-inner'></div>
+    </div>
+    <div class='bg-right'>
+      <div class='bg-inner'></div>
+    </div>
+    <div class='bg'>
+      <div class='bg-inner'></div>
+    </div>
+    <div class='text'>
+      <input class="btn-btn-default" type="submit" value="Login">
+    </div>
+  </button>
+
+  
+  <div class='signup'>
+    <a href='/signup'>sign up</a>
+  </div>
+  
+  <div class='credits'>
+    <a href='https://codepen.io/marko-zub/' target='_blank'>
+      login design by
+    </a>
+  </div>
+</form>
