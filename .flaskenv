@@ -1,1 +1,1 @@
-FLASK_APP=attendance.py
+FLASK_APP=app.py
