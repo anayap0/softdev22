@@ -194,3 +194,12 @@ def unfollow(username):
         return redirect(url_for('user', username=username))
     else:
         return redirect(url_for('index'))
+
+@app.route('/database')
+def database():
+    return render_template(
+        'database.html',
+        title='Database',
+        users=User.query.all(),
+        posts=Post.query.all()
+    )
