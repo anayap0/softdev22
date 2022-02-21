@@ -1,12 +1,15 @@
 from datetime import datetime
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, send_from_directory
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
+from werkzeug.utils import secure_filename
 from app import app, db
+from app.files import validate_image
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, \
     EmptyForm, PostForm, ResetPasswordRequestForm, ResetPasswordForm
 from app.models import User, Post
 from app.email import send_password_reset_email
+import os
 
 
 @app.before_request
@@ -21,12 +24,29 @@ def before_request():
 @login_required
 def index():
     form = PostForm()
+
     if form.validate_on_submit():
         post = Post(body=form.post.data, author=current_user)
         db.session.add(post)
         db.session.commit()
+        # file / message upload -------
+        uploaded_file = request.files['file'] # supports only one file 
+        filename = secure_filename(uploaded_file.filename)
+        if filename != '':
+            file_ext = os.path.splitext(filename)[1]
+            if file_ext not in app.config['UPLOAD_EXTENSIONS'] or \
+                    file_ext != validate_image(uploaded_file.stream):
+                return "Invalid Image", 400
+            file_path = os.path.join(app.config['UPLOAD_PATH'], str(post.id) + file_ext)
+            uploaded_file.save(file_path)
+            post = Post(body=form.post.data, author=current_user,\
+                 image_url=url_for('upload', filename=str(post.id)+file_ext))
+        # ---------
+        db.session.add(post)
+        db.session.commit()
         flash('Your post is now live!')
         return redirect(url_for('index'))
+
     page = request.args.get('page', 1, type=int)
     posts = current_user.followed_posts().paginate(
         page, app.config['POSTS_PER_PAGE'], False)
@@ -194,6 +214,10 @@ def unfollow(username):
         return redirect(url_for('user', username=username))
     else:
         return redirect(url_for('index'))
+
+@app.route('/uploads/<filename>')
+def upload(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/database')
 def database():
