@@ -27,8 +27,6 @@ def index():
 
     if form.validate_on_submit():
         post = Post(body=form.post.data, author=current_user)
-        db.session.add(post)
-        db.session.commit()
         # file / message upload -------
         uploaded_file = request.files['file'] # supports only one file 
         filename = secure_filename(uploaded_file.filename)
@@ -40,7 +38,9 @@ def index():
             file_path = os.path.join(app.config['UPLOAD_PATH'], str(post.id) + file_ext)
             uploaded_file.save(file_path)
             post.image_url=url_for('upload', filename=str(post.id)+file_ext) # update post object with filename
-            db.session.commit() # commit the change (updating image_url) to db
+
+        db.session.add(post)
+        db.session.commit()
         # ---------
         flash('Your post is now live!')
         return redirect(url_for('index'))
