@@ -27,6 +27,7 @@ def index():
 
     if form.validate_on_submit():
         post = Post(body=form.post.data, author=current_user)
+        print(post.id)
         # file / message upload -------
         uploaded_file = request.files['file'] # supports only one file 
         filename = secure_filename(uploaded_file.filename)
@@ -35,12 +36,15 @@ def index():
             if file_ext not in app.config['UPLOAD_EXTENSIONS'] or \
                     file_ext != validate_image(uploaded_file.stream):
                 return "Invalid Image", 400
+            db.session.add(post)
+            db.session.commit()
+            print(post.id)
             file_path = os.path.join(app.config['UPLOAD_PATH'], str(post.id) + file_ext)
             uploaded_file.save(file_path)
             post.image_url=url_for('upload', filename=str(post.id)+file_ext) # update post object with filename
-
-        db.session.add(post)
-        db.session.commit()
+        else:
+            db.session.add(post)
+            db.session.commit()
         # ---------
         flash('Your post is now live!')
         return redirect(url_for('index'))
