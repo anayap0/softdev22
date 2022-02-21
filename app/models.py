@@ -89,3 +89,38 @@ class Post(db.Model):
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
+
+# Tag Models
+class CourseGroup(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(16), unique=True, index=True)
+    courses = db.relationship('Course', backref='group', lazy='dynamic')
+
+class School(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+
+class Course(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(28))
+    course_id = db.Column(db.Integer, db.ForeignKey('coursegroup.id'))
+    units = db.relationship('Unit', backref='unit_course', lazy='dynamic')
+
+class Unit(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    number = db.Column(db.Integer)
+    name = db.Column(db.String)
+
+class SubUnit(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'))
+
+class Subject(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, unique=True)
+    topics = db.relationship('Topic', backref='topic_subject', lazy='dynamic')
+
+class Topic(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'))
