@@ -37,6 +37,7 @@
             <th>Body</th>
             <th>Timestamp</th>
             <th>User</th>
+            <th>Image URL</th>
         </tr>
         <tbody>
             {% for p in posts %}
@@ -45,6 +46,7 @@
                 <td>{{ p.body }}</td>
                 <td>{{ p.timestamp }}</td>
                 <td>{{ p.author.username }}</td>
+                <td>{{ p.image_url }}</td>
             </tr>
             {% endfor %}
         </tbody>
