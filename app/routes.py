@@ -4,7 +4,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
 from werkzeug.utils import secure_filename
 from app import app, db
-from app.files import validate_image
+from app.files import validate_file
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, \
     EmptyForm, PostForm, ResetPasswordRequestForm, ResetPasswordForm
 from app.models import User, Post
@@ -18,26 +18,38 @@ def before_request():
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
 
+@app.route('/delete', methods=['GET', 'POST'])
+def delete():
+    post = Post.query.all()
+    for i in post:
+        path = os.getcwd() + f"/app{i.image_url}"
+        print(path)
+        print(os.path.exists(path))
+        if os.path.exists(path):
+            os.remove(path)
+        db.session.delete(i)
+    db.session.commit()
+    flash('deleted')
+    return redirect(url_for('index'))
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
     form = PostForm()
-
     if form.validate_on_submit():
         post = Post(body=form.post.data, author=current_user)
-        print(post.id)
-        # file / message upload -------
         uploaded_file = request.files['file'] # supports only one file 
         filename = secure_filename(uploaded_file.filename)
+        print(filename)
         if filename != '':
             file_ext = os.path.splitext(filename)[1]
             if file_ext not in app.config['UPLOAD_EXTENSIONS'] or \
-                    file_ext != validate_image(uploaded_file.stream):
+                    (file_ext != validate_file(uploaded_file.stream) and \
+                        file_ext != '.docx'):
                 return "Invalid Image", 400
             db.session.add(post)
-            print(post.id)
+            db.session.commit()
             file_path = os.path.join(app.config['UPLOAD_PATH'], str(post.id) + file_ext)
             uploaded_file.save(file_path)
             post.image_url=url_for('upload', filename=str(post.id)+file_ext) # update post object with filename
@@ -45,7 +57,6 @@ def index():
         else:
             db.session.add(post)
             db.session.commit()
-        # ---------
         flash('Your post is now live!')
         return redirect(url_for('index'))
 
