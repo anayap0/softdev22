@@ -12,6 +12,9 @@
                 said {{ moment(post.timestamp).fromNow() }}:
                 <br>
                 {{ post.body }}
+                {% if post.image_url %}
+                <img src="{{ post.image_url }}" alt="Image"></img>
+                {% endif %}
             </td>
         </tr>
     </table>
