@@ -37,11 +37,11 @@ def index():
                     file_ext != validate_image(uploaded_file.stream):
                 return "Invalid Image", 400
             db.session.add(post)
-            db.session.commit()
             print(post.id)
             file_path = os.path.join(app.config['UPLOAD_PATH'], str(post.id) + file_ext)
             uploaded_file.save(file_path)
             post.image_url=url_for('upload', filename=str(post.id)+file_ext) # update post object with filename
+            db.session.commit()
         else:
             db.session.add(post)
             db.session.commit()
