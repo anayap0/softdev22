@@ -39,11 +39,9 @@ def index():
                 return "Invalid Image", 400
             file_path = os.path.join(app.config['UPLOAD_PATH'], str(post.id) + file_ext)
             uploaded_file.save(file_path)
-            post = Post(body=form.post.data, author=current_user,\
-                 image_url=url_for('upload', filename=str(post.id)+file_ext))
+            post.image_url=url_for('upload', filename=str(post.id)+file_ext) # update post object with filename
+            db.session.commit() # commit the change (updating image_url) to db
         # ---------
-        db.session.add(post)
-        db.session.commit()
         flash('Your post is now live!')
         return redirect(url_for('index'))
 
