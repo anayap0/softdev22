@@ -13,7 +13,9 @@
                 <br>
                 {{ post.body }}
                 {% if post.image_url %}
-                <img src="{{ post.image_url }}" alt="Image"></img>
+                <div class="image_box" style="width:100%;">
+                    <img src="{{ post.image_url }}" alt="Image" style="width:50%;"></img>
+                </div>
                 {% endif %}
             </td>
         </tr>
