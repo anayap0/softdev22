@@ -7,7 +7,8 @@ from app import app, db
 from app.files import validate_file
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, \
     EmptyForm, PostForm, ResetPasswordRequestForm, ResetPasswordForm
-from app.models import User, Post
+from app.models import User, Post \
+    
 from app.email import send_password_reset_email
 import os
 

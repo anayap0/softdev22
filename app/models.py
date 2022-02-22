@@ -156,7 +156,7 @@ class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(28))
     course_group_id = db.Column(db.Integer, db.ForeignKey('course_group.id'))
-    subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'))
+    subject_id = db.Column(db.Integer, db.ForeignKey('subject.id')) 
     units = db.relationship('Unit', backref='corr_course', lazy='dynamic') # corr_course = corresponding course
     tags = db.relationship('CourseTag', backref='course', lazy='dynamic')
 
