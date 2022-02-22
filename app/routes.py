@@ -235,7 +235,6 @@ def upload(filename):
 @app.route('/post/<postid>')
 def get_post(postid):
     post = Post.query.get(postid)
-    print(request.path)
     return render_template('post.html', title=post.title, post=post)
 
 
