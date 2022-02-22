@@ -39,7 +39,7 @@ def delete():
 def index():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(body=form.post.data, author=current_user)
+        post = Post(body=form.post.data, author=current_user, title=form.title.data)
         uploaded_file = request.files['file'] # supports only one file 
         filename = secure_filename(uploaded_file.filename)
         print(filename)
@@ -232,6 +232,12 @@ def unfollow(username):
 @app.route('/uploads/<filename>')
 def upload(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route('/post/<postid>')
+def get_post(postid):
+    post = Post.query.get(postid)
+    return render_template('post.html', title=post.title, post=post)
+
 
 @app.route('/database')
 def database():
