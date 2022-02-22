@@ -1,22 +1,31 @@
-    <table class="table table-hover">
-        <tr>
-            <td width="70px">
-                <a href="{{ url_for('user', username=post.author.username) }}">
-                    <img src="{{ post.author.avatar(70) }}" />
-                </a>
-            </td>
-            <td>
-                <a href="{{ url_for('user', username=post.author.username) }}">
-                    {{ post.author.username }}
-                </a>
-                said {{ moment(post.timestamp).fromNow() }}:
-                <br>
-                {{ post.body }}
-                {% if post.image_url %}
-                <div class="image_box" style="width:100%;">
-                    <img src="{{ post.image_url }}" alt="Image" style="width:50%;"></img>
-                </div>
-                {% endif %}
-            </td>
-        </tr>
-    </table>
+<table class="table table-hover">
+<tr>
+    <td width="70px">
+        <a href="{{ url_for('user', username=post.author.username) }}">
+            <img src="{{ post.author.avatar(70) }}" />
+        </a>
+    </td>
+    <td>
+        <a href="{{ url_for('user', username=post.author.username) }}">
+            {{ post.author.username }}
+        </a>
+        said {{ moment(post.timestamp).fromNow() }}:
+        <br>
+        <p>{{ post.body }}</p>
+
+        {% if post.image_url %}
+            {% set file_ext = post.image_url.split('.')[-1] %}
+            {% if file_ext in ['png', 'jpg'] %}
+                <img src="{{ post.image_url }}" alt="Image" style="max-height: 200px; max-width: 200px;"></img>
+            {% endif %}
+            {% if file_ext == 'pdf' %}    <!-- TODO: google embed will work when server published :( -->
+                <!-- <iframe src="https://docs.google.com/gview?url=http://127.0.0.1:5000{{ post.image_url }}&embedded=true" style=width:600px; height:500px; title="pdf"></iframe> -->
+                <iframe style='margin-top:0.7em' src='{{ post.image_url }}' height='200' width='300' title='pdf'></iframe>
+            {% endif %}
+            {% if file_ext == 'docx' %} <!-- will implement after server hosting -->
+                <!-- <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://cdn.discordapp.com/attachments/846891310296203324/945424581664055326/Insert_school_work_here.docx" height='200' width='300' title='docx'></iframe> -->
+                <iframe src="https://docs.google.com/gview?url=https://cdn.discordapp.com/attachments/846891310296203324/945424581664055326/Insert_school_work_here.docx&embedded=True" height='200' width='300' title='docx'></iframe>
+            {% endif %}
+        {% endif %}
+    </td>
+</tr>

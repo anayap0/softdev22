@@ -14,7 +14,7 @@ class Config(object):
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     ADMINS = []
     POSTS_PER_PAGE = 25
-    UPLOAD_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif'] # for file upload   TODO: choose allowed extensions 
+    UPLOAD_EXTENSIONS = ['.jpg', '.png', '.gif', '.pdf', '.docx', 'zip'] # for file upload   TODO: choose allowed extensions (word docs are seen as zip files?!?!?!)
     MAX_CONTENT_LENGTH = 1024 * 1024 # for file upload
     UPLOAD_PATH = './app/uploads' # for file upload
     UPLOAD_FOLDER = 'uploads' # for file upload
