@@ -85,6 +85,7 @@ def load_user(id):
 class Post(db.Model):
     # __tablename__ = 'post'
     id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(30))
     body = db.Column(db.String(140))
     image_url = db.Column(db.String(100))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
@@ -100,7 +101,7 @@ class Post(db.Model):
     post_topic_tags = db.relationship('TopicTag', backref='post', lazy='dynamic')
 
     def __repr__(self):
-        return '<Post {}>'.format(self.body)
+        return f'<Post: {self.title}\n{self.body}>'
 
 # Tag Models
 class CourseGroupTag(db.Model):

@@ -66,6 +66,7 @@ class EmptyForm(FlaskForm):
 
 
 class PostForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired(), Length(min=0, max=30)])
     post = TextAreaField('Say something', validators=[DataRequired()])
     file = FileField('File')
     submit = SubmitField('Submit')
