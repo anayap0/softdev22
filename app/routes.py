@@ -5,10 +5,9 @@ from werkzeug.urls import url_parse
 from werkzeug.utils import secure_filename
 from app import app, db
 from app.files import validate_file
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, \
+from app.forms import AddCommentForm, LoginForm, RegistrationForm, EditProfileForm, \
     EmptyForm, PostForm, ResetPasswordRequestForm, ResetPasswordForm
-from app.models import User, Post \
-    
+from app.models import Comment, User, Post
 from app.email import send_password_reset_email
 import os
 
@@ -233,10 +232,17 @@ def unfollow(username):
 def upload(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
-@app.route('/post/<postid>')
+@app.route('/post/<int:postid>', methods=['GET', 'POST'])
 def get_post(postid):
     post = Post.query.get(postid)
-    return render_template('post.html', title=post.title, post=post)
+    comment_form = AddCommentForm()
+    if request.method == "POST" and comment_form.validate_on_submit(): # TODO: and is signed in 
+        comment = Comment(body=comment_form.body.data, post_id=postid, user_id=current_user.id)
+        db.session.add(comment)
+        db.session.commit()
+        flash("Your comment has been added to the post", "success")
+    return render_template('post.html', post=post, form=comment_form, author=current_user)
+
 
 
 @app.route('/database')

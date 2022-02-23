@@ -21,6 +21,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    comments = db.relationship('Comment', backref='author', lazy='dynamic')
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     followed = db.relationship(
@@ -91,6 +92,9 @@ class Post(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     
+    # Comment relationship 
+    comments = db.relationship('Comment', backref='post', lazy='dynamic')
+
     # Tag relationships
     post_course_group_tags = db.relationship('CourseGroupTag', backref='post', lazy='dynamic')
     post_course_tags = db.relationship('CourseTag', backref='post', lazy='dynamic')
@@ -101,7 +105,20 @@ class Post(db.Model):
     post_topic_tags = db.relationship('TopicTag', backref='post', lazy='dynamic')
 
     def __repr__(self):
-        return f'<Post: {self.title}\n{self.body}>'
+        return f'<Post Title: {self.title}\nPost Body: {self.body}>'
+
+# Comments Model
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String(140))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+    def __repr__(self):
+        return f'<Comment: {self.body}>'
+
 
 # Tag Models
 class CourseGroupTag(db.Model):

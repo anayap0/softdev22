@@ -67,6 +67,10 @@ class EmptyForm(FlaskForm):
 
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(min=0, max=30)])
-    post = TextAreaField('Say something', validators=[DataRequired()])
+    body = TextAreaField('Say something', validators=[DataRequired()])
     file = FileField('File')
     submit = SubmitField('Submit')
+
+class AddCommentForm(FlaskForm):
+    body = StringField("Comment", validators=[DataRequired(), Length(min=0, max=100)])
+    submit = SubmitField("Post")

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
 
@@ -40,19 +40,23 @@
             {% endif %}
         </td>
     </tr>     
-    
-
-    <style>
-        @media only screen and (max-width: 450px) {
-            #desktop {
-                display: none;
-            }   
-        }
-        @media only screen and (min-width: 450px) {
-            #mobile {
-                display: none;
-            }   
-        }
-    </style>    
+</table>
+{{ wtf.quick_form(form) }}
+<br>
+{% for comment in post.comments|reverse %}
+    {% include '_comment.html' %}
+{% endfor %}
+<style>
+    @media only screen and (max-width: 450px) {
+        #desktop {
+            display: none;
+        }   
+    }
+    @media only screen and (min-width: 450px) {
+        #mobile {
+            display: none;
+        }   
+    }
+</style>    
 {% endblock %}
 
