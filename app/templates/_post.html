@@ -20,15 +20,15 @@
             </div>
             <p style="margin-top: 12px; font-size:17px">{{ post.body }}</p>
             {% if post.image_url %}
-                {% set file_ext = post.image_url.split('.')[-1] %}
-                {% if file_ext in ['png', 'jpg'] %}
+                {% set file_ext = "." + post.image_url.split('.')[-1] %}
+                {% if file_ext in ['.png', '.jpg', '.gif'] %}
                     <img src="{{ post.image_url }}" alt="Image" style="max-height: 450px; max-width: 75%; clear: both; display: inline;"></img>
                 {% endif %}
                 {% if file_ext == 'pdf' %}    <!-- TODO: google embed will work when server published :( -->
                     <!-- <iframe src="https://docs.google.com/gview?url=http://127.0.0.1:5000{{ post.image_url }}&embedded=true" style=width:600px; height:500px; title="pdf"></iframe> -->
                     <iframe style='margin-top:0.7em' src='{{ post.image_url }}' height='450' width='95%' title='pdf'></iframe>
                 {% endif %}
-                {% if file_ext == 'docx' %} <!-- will implement after server hosting -->
+                {% if file_ext in office_extensions %} <!-- will implement after server hosting -->
                     <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://cdn.discordapp.com/attachments/846891310296203324/945424581664055326/Insert_school_work_here.docx" height='450px' width='95%' title='docx' id="desktop"></iframe>
                     <iframe src="https://docs.google.com/gview?url=https://cdn.discordapp.com/attachments/846891310296203324/945424581664055326/Insert_school_work_here.docx&embedded=True" height='450' width='95%' title='docx' id="mobile"></iframe>
                 {% endif %}
@@ -38,12 +38,12 @@
 </table>
 
 <style>
-    @media only screen and (max-width: 450px) {
+    @media only screen and (max-width: 501px) {
         #desktop {
             display: none;
         }   
     }
-    @media only screen and (min-width: 450px) {
+    @media only screen and (min-width: 501px) {
         #mobile {
             display: none;
         }   

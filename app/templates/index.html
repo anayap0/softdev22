@@ -2,6 +2,7 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
+    <style>textarea { resize: vertical; min-height: 122px; } </style>
     <h1>Hi, {{ current_user.username }}!</h1>
     {% if form %}
     {{ wtf.quick_form(form) }}

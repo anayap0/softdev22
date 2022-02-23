@@ -44,9 +44,11 @@ def index():
         print(filename)
         if filename != '':
             file_ext = os.path.splitext(filename)[1]
+            print("original:", file_ext)
+            print("validated:", validate_file(uploaded_file.stream))
             if file_ext not in app.config['UPLOAD_EXTENSIONS'] or \
                     (file_ext != validate_file(uploaded_file.stream) and \
-                        file_ext != '.docx'):
+                        file_ext not in app.config['OFFICE_EXTENSIONS']):
                 return "Invalid Image", 400
             db.session.add(post)
             db.session.commit()
@@ -69,7 +71,7 @@ def index():
         if posts.has_prev else None
     return render_template('index.html', title='Home', form=form,
                            posts=posts.items, next_url=next_url,
-                           prev_url=prev_url)
+                           prev_url=prev_url, office_extensions=app.config["OFFICE_EXTENSIONS"])
 
 
 @app.route('/explore')
@@ -242,8 +244,6 @@ def get_post(postid):
         db.session.commit()
         flash("Your comment has been added to the post", "success")
     return render_template('post.html', post=post, form=comment_form, author=current_user)
-
-
 
 @app.route('/database')
 def database():

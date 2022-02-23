@@ -2,5 +2,9 @@
 
 {% block app_content %}
     <h1>Not Found</h1>
-    <p><a href="{{ url_for('index') }}">Back</a></p>
+    <style>
+        body { background-image:url('https://cdn.glitch.com/0e4d1ff3-5897-47c5-9711-d026c01539b8%2Fbddfd6e4434f42662b009295c9bab86e.gif?v=1573157191712'); background-repeat:repeat; background-color: rgba(255,255,255,0.8); background-blend-mode: lighten; }
+    </style>
+    <p style="padding-top:10px"><a class="btn btn-primary" role="button" href="{{ url_for('index') }}">Back</a></p>
 {% endblock %}
+
