@@ -85,7 +85,7 @@ def explore():
     prev_url = url_for('explore', page=posts.prev_num) \
         if posts.has_prev else None
     return render_template('index.html', title='Explore', posts=posts.items,
-                           next_url=next_url, prev_url=prev_url)
+                           next_url=next_url, prev_url=prev_url, office_extensions=app.config["OFFICE_EXTENSIONS"])
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -171,7 +171,7 @@ def user(username):
         if posts.has_prev else None
     form = EmptyForm()
     return render_template('user.html', user=user, posts=posts.items,
-                           next_url=next_url, prev_url=prev_url, form=form)
+                           next_url=next_url, prev_url=prev_url, form=form, office_extensions=app.config["OFFICE_EXTENSIONS"])
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
