@@ -38,7 +38,7 @@ def delete():
 def index():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(body=form.post.data, author=current_user, title=form.title.data)
+        post = Post(body=form.body.data, author=current_user, title=form.title.data)
         uploaded_file = request.files['file'] # supports only one file 
         filename = secure_filename(uploaded_file.filename)
         print(filename)
