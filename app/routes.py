@@ -45,13 +45,9 @@ def index():
     form.tags.choices = get_tag_choices(group_classes)
     if form.validate_on_submit():
         post = Post(body=form.body.data, author=current_user, title=form.title.data)
-        # print("\n\nFILE_DATA: {}\n\n".format(file))
-        # print("\n\nREQUEST.FILE: {}\n\n".format(request.files['file']))
-        if request.files:
-            uploaded_file = form.file.data
-            # uploaded_file = request.files['file'] # supports only one file
+        uploaded_file = form.file.data
+        if uploaded_file is not None:
             filename = secure_filename(uploaded_file.filename)
-            # print(filename)
             file_ext = os.path.splitext(filename)[1]
             validated = validate_file(uploaded_file.stream)
             print("original:", file_ext)
@@ -64,7 +60,6 @@ def index():
             db.session.commit()
             post_id = post.id
             tag_values=form.tags.data
-            # print("type ({}): {}".format(type(tag_values), tag_values))
             write_tag_choices(post_id, tag_values, commit=False)
             file_path = os.path.join(app.config['UPLOAD_PATH'], str(post_id) + file_ext)
             uploaded_file.save(file_path)
@@ -75,7 +70,6 @@ def index():
             db.session.commit()
             post_id = post.id
             tag_values=form.tags.data
-            # print("type ({}): {}".format(type(tag_values), tag_values))
             write_tag_choices(post_id, tag_values, commit=False)
             db.session.commit()
         flash('Your post is now live!')
