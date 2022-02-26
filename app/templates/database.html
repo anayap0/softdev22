@@ -29,11 +29,12 @@
         </tbody>
     </table><br>
 
-    <!-- <hr>
+    <hr>
     <h2>Post</h2>
     <table>
         <tr>
             <th>ID</th>
+            <th>Title</th>
             <th>Body</th>
             <th>Timestamp</th>
             <th>User</th>
@@ -43,6 +44,7 @@
             {% for p in posts %}
             <tr>
                 <td>{{ p.id }}</td>
+                <td>{{ p.title }}</td>
                 <td>{{ p.body }}</td>
                 <td>{{ p.timestamp }}</td>
                 <td>{{ p.author.username }}</td>
@@ -50,7 +52,7 @@
             </tr>
             {% endfor %}
         </tbody>
-    </table><br> -->
+    </table><br>
     
     <hr>
     <h2>Schools</h2>

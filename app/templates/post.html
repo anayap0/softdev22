@@ -16,10 +16,10 @@
             <div class="post_details" style="padding-bottom: 10px; border-bottom: 1px solid #ddd">
                 <strong style="font-size: 20px">Posted by </strong>
                 <span class="label label-danger" style="font-size: 110%;"><a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a></span>
-                <strong style="font-size: 20px">under </strong>
-                {% if tags %}
-                    {% for tag in tags %}
-                        <span class="label label-primary" style="font-size: 110%;">{{ tag }}</span>  <!-- implement when tags  -->
+                {% if post_tags|length > 0 %}
+                    <strong style="font-size: 20px">under </strong>
+                    {% for tag in post_tags %}
+                        <span class="label label-primary" style="font-size: 110%;">{{ tag.source.name }}</span>  <!-- implement when tags  -->
                     {% endfor %}
                 {% endif %}
             </div>

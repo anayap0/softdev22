@@ -7,9 +7,10 @@ from app import app, db
 from app.files import validate_file
 from app.forms import AddCommentForm, LoginForm, RegistrationForm, EditProfileForm, \
     EmptyForm, PostForm, ResetPasswordRequestForm, ResetPasswordForm
-from app.models import User, Post, School, \
+from app.models import User, Post, Comment, School, \
     CourseGroup, Course, Unit, SubUnit, Subject, Topic, \
         CourseGroupTag, CourseTag, UnitTag, SubUnitTag, SubjectTag
+from app.tags import get_tag_choices, group_classes, group_colors, write_tag_choices
 from app.email import send_password_reset_email
 import os
 
@@ -39,40 +40,60 @@ def delete():
 @login_required
 def index():
     form = PostForm()
+    form.tags.choices = get_tag_choices(group_classes)
     if form.validate_on_submit():
         post = Post(body=form.body.data, author=current_user, title=form.title.data)
-        uploaded_file = request.files['file'] # supports only one file 
-        filename = secure_filename(uploaded_file.filename)
-        print(filename)
-        if filename != '':
+        # print("\n\nFILE_DATA: {}\n\n".format(file))
+        # print("\n\nREQUEST.FILE: {}\n\n".format(request.files['file']))
+        if request.files:
+            uploaded_file = form.file.data
+            # uploaded_file = request.files['file'] # supports only one file
+            filename = secure_filename(uploaded_file.filename)
+            # print(filename)
             file_ext = os.path.splitext(filename)[1]
+            validated = validate_file(uploaded_file.stream)
             print("original:", file_ext)
-            print("validated:", validate_file(uploaded_file.stream))
+            print("validated:", validated)
             if file_ext not in app.config['UPLOAD_EXTENSIONS'] or \
-                    (file_ext != validate_file(uploaded_file.stream) and \
+                    (file_ext != validated and \
                         file_ext not in app.config['OFFICE_EXTENSIONS']):
                 return "Invalid Image", 400
             db.session.add(post)
             db.session.commit()
-            file_path = os.path.join(app.config['UPLOAD_PATH'], str(post.id) + file_ext)
+            post_id = post.id
+            tag_values=form.tags.data
+            # print("type ({}): {}".format(type(tag_values), tag_values))
+            write_tag_choices(post_id, tag_values, commit=False)
+            file_path = os.path.join(app.config['UPLOAD_PATH'], str(post_id) + file_ext)
             uploaded_file.save(file_path)
-            post.image_url=url_for('upload', filename=str(post.id)+file_ext) # update post object with filename
+            post.image_url=url_for('upload', filename=str(post_id)+file_ext) # update post object with filename
             db.session.commit()
         else:
             db.session.add(post)
             db.session.commit()
+            post_id = post.id
+            tag_values=form.tags.data
+            # print("type ({}): {}".format(type(tag_values), tag_values))
+            write_tag_choices(post_id, tag_values, commit=False)
+            db.session.commit()
         flash('Your post is now live!')
         return redirect(url_for('index'))
+    
 
+    followed_posts = current_user.followed_posts()
+    post_tags = {post.id : post.get_tags() for post in followed_posts}
+    # print(post_tags)
     page = request.args.get('page', 1, type=int)
-    posts = current_user.followed_posts().paginate(
+    posts = followed_posts.paginate(
         page, app.config['POSTS_PER_PAGE'], False)
+    print(posts)
     next_url = url_for('index', page=posts.next_num) \
         if posts.has_next else None
     prev_url = url_for('index', page=posts.prev_num) \
         if posts.has_prev else None
     return render_template('index.html', title='Home', form=form,
                            posts=posts.items, next_url=next_url,
+                           all_tags=post_tags, tag_colors=group_colors,
                            prev_url=prev_url, office_extensions=app.config["OFFICE_EXTENSIONS"])
 
 
@@ -239,13 +260,14 @@ def upload(filename):
 @app.route('/post/<int:postid>', methods=['GET', 'POST'])
 def get_post(postid):
     post = Post.query.get(postid)
+    tags = post.get_tags_list()
     comment_form = AddCommentForm()
     if request.method == "POST" and comment_form.validate_on_submit(): # TODO: and is signed in 
         comment = Comment(body=comment_form.body.data, post_id=postid, user_id=current_user.id)
         db.session.add(comment)
         db.session.commit()
         flash("Your comment has been added to the post", "success")
-    return render_template('post.html', post=post, form=comment_form, author=current_user)
+    return render_template('post.html', post=post, form=comment_form, author=current_user, post_tags=tags)
 
 @app.route('/database')
 def database():
