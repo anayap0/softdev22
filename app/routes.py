@@ -7,7 +7,9 @@ from app import app, db
 from app.files import validate_file
 from app.forms import AddCommentForm, LoginForm, RegistrationForm, EditProfileForm, \
     EmptyForm, PostForm, ResetPasswordRequestForm, ResetPasswordForm
-from app.models import Comment, User, Post
+from app.models import User, Post, School, \
+    CourseGroup, Course, Unit, SubUnit, Subject, Topic, \
+        CourseGroupTag, CourseTag, UnitTag, SubUnitTag, SubjectTag
 from app.email import send_password_reset_email
 import os
 
@@ -251,5 +253,12 @@ def database():
         'database.html',
         title='Database',
         users=User.query.all(),
-        posts=Post.query.all()
+        # posts=Post.query.all(),
+        course_groups=CourseGroup.query.all(),
+        courses=Course.query.all(),
+        units=Unit.query.all(),
+        subunits=SubUnit.query.all(),
+        subjects=Subject.query.all(),
+        topics=Topic.query.all(),
+        schools=School.query.all()
     )

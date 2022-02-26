@@ -29,7 +29,7 @@
         </tbody>
     </table><br>
 
-    <hr>
+    <!-- <hr>
     <h2>Post</h2>
     <table>
         <tr>
@@ -47,6 +47,133 @@
                 <td>{{ p.timestamp }}</td>
                 <td>{{ p.author.username }}</td>
                 <td>{{ p.image_url }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table><br> -->
+    
+    <hr>
+    <h2>Schools</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+        </tr>
+        <tbody>
+            {% for s in schools %}
+            <tr>
+                <td>{{ s.id }}</td>
+                <td>{{ s.name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table><br>
+
+    <hr>
+    <h2>Course Groups</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+        </tr>
+        <tbody>
+            {% for c in course_groups %}
+            <tr>
+                <td>{{ c.id }}</td>
+                <td>{{ c.name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table><br>
+
+    <hr>
+    <h2>Courses</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Course Group</th>
+            <th>Subject</th>
+            <th>Course Name</th>
+        </tr>
+        <tbody>
+            {% for c in courses %}
+            <tr>
+                <td>{{ c.id }}</td>
+                <td>{{ c.group.name }}</td>
+                <td>{{ c.subject.name }}</td>
+                <td>{{ c.name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table><br>
+
+    <hr>
+    <h2>Unit</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Course</th>
+        </tr>
+        <tbody>
+            {% for u in units %}
+            <tr>
+                <td>{{ u.id }}</td>
+                <td>{{ u.name }}</td>
+                <td>{{ u.corr_course }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table><br>
+
+    <hr>
+    <h2>SubUnit</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Unit</th>
+        </tr>
+        <tbody>
+            {% for s in subunits %}
+            <tr>
+                <td>{{ s.id }}</td>
+                <td>{{ s.name }}</td>
+                <td>{{ s.unit.name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table><br>
+
+    <hr>
+    <h2>Subject</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+        </tr>
+        <tbody>
+            {% for s in subjects %}
+            <tr>
+                <td>{{ s.id }}</td>
+                <td>{{ s.name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table><br>
+
+    <hr>
+    <h2>Topic</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Subject</th>
+        </tr>
+        <tbody>
+            {% for t in topics %}
+            <tr>
+                <td>{{ t.id }}</td>
+                <td>{{ t.subject.name }}</td>
             </tr>
             {% endfor %}
         </tbody>
