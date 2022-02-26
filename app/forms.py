@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField # NEW 
+from flask_wtf.file import FileField, FileRequired # NEW 
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
-    TextAreaField
+    TextAreaField, SelectMultipleField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length
 from app.models import User
@@ -69,6 +69,8 @@ class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(min=0, max=30)])
     body = TextAreaField('Say something', validators=[DataRequired()])
     file = FileField('File')
+
+    tags = SelectMultipleField('Add tags!')
     submit = SubmitField('Submit')
 
 class AddCommentForm(FlaskForm):
