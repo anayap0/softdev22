@@ -1,4 +1,6 @@
 from datetime import datetime
+
+from numpy import ALLOW_THREADS
 from flask import render_template, flash, redirect, url_for, request, send_from_directory
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
@@ -107,8 +109,11 @@ def explore():
         if posts.has_next else None
     prev_url = url_for('explore', page=posts.prev_num) \
         if posts.has_prev else None
+    
+    post_tags = {post.id : post.get_tags() for post in posts.query.all()}
     return render_template('index.html', title='Explore', posts=posts.items,
-                           next_url=next_url, prev_url=prev_url, office_extensions=app.config["OFFICE_EXTENSIONS"])
+                            all_tags=post_tags, tag_colors=group_colors,
+                            next_url=next_url, prev_url=prev_url, office_extensions=app.config["OFFICE_EXTENSIONS"])
 
 
 @app.route('/login', methods=['GET', 'POST'])
