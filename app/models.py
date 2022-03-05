@@ -24,6 +24,7 @@ class User(UserMixin, db.Model):
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    user_post_vote = db.relationship('PostVote', backref='author', lazy='dynamic')
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
@@ -190,6 +191,7 @@ class Post(db.Model):
     image_url = db.Column(db.String(100))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    post_votes = db.relationship('PostVote', backref='post_votes', lazy='dynamic')
     
     # Comment relationship 
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
@@ -258,3 +260,27 @@ class Post(db.Model):
         if new_tag:
             db.session.add(new_tag)
             db.session.commit()
+
+    def upvote(self):
+        # upvotes += 1
+        pass
+
+    def downvote(self):
+        # downvotes += 1
+        pass
+
+class PostVote(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User', backref=db.backref('user_post_votes'))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    post = db.relationship('Post', backref=db.backref('all_post_votes'))
+    upvote = db.Column(db.Boolean, nullable = False)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        if self.upvote == True:
+            vote = 'Up'
+        else:
+            vote = 'Down'
+        return '<Vote - {}, from {} for {}>'.format(vote, self.user.username, self.post.header)

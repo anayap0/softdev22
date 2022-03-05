@@ -73,6 +73,7 @@ class PostForm(FlaskForm):
     tags = SelectMultipleField('Add tags!')
     submit = SubmitField('Submit')
 
+
 class AddCommentForm(FlaskForm):
     body = StringField("Comment", validators=[DataRequired(), Length(min=0, max=100)])
     submit = SubmitField("Post")

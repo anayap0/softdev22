@@ -283,3 +283,25 @@ def database():
         topics=Topic.query.all(),
         schools=School.query.all()
     )
+
+@app.route('/_post_vote/<post_id>/<action_vote>', methods=['GET'])
+@login_required
+def _post_vote(post_id, action_vote):
+    post = Post.query.filter_by(id = post_id).first_or_404()
+    vote = PostVote.query.filter_by(
+        user = current_user,
+        post = post).first()
+    if vote:
+        if vote.upvote != bool(int(action_vote)):
+            vote.upvote = bool(int(action_vote))
+            db.session.commit()
+            return redirect(url_for('main._post', post_id = post.id))
+        else:
+            flash('You already vote for this post')
+            return redirect(url_for('main._post', post_id = post.id))
+
+    vote = PostVote(user = current_user, post = post, upvote = bool(int(action_vote)))
+    db.session.add(vote)
+    db.session.commit()
+    flash('Thx for voting')
+    return redirect(url_for('main._post', post_id = post.id))
