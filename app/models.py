@@ -276,7 +276,6 @@ class PostVote(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     post = db.relationship('Post', backref=db.backref('all_post_votes'))
     upvote = db.Column(db.Boolean, nullable = False)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     def __repr__(self):
         if self.upvote == True:
