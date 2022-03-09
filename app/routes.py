@@ -293,7 +293,7 @@ def _post_vote(post_id, action_vote):
         post_id = post_id).first()
     upvote = bool(int(action_vote))
     if vote is not None:
-        print("ALREADY VOTED")
+        # print("ALREADY VOTED")
         vote.upvote = upvote
         vote.timestamp = datetime.utcnow()
         db.session.commit()
@@ -309,7 +309,7 @@ def _post_vote(post_id, action_vote):
         # flash('You already vote for this post')
         # return redirect(url_for('main._post', post_id = post.id))
 
-    # flash('Thx for voting')
+    flash('Thx for voting')
     votes = post.votes_num()
-    print(f"#VOTED {votes}")
+    # print(f"#VOTED {votes}")
     return jsonify({'votes': votes})
