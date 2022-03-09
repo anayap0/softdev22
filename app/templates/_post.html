@@ -3,8 +3,17 @@
         <td width="70px" id="desktop">
             <a href="{{ url_for('user', username=post.author.username) }}">
                 <img src="{{ post.author.avatar(70) }}" alt='avatar'/>
-            </a>
-        </td>
+            </a><br>
+            <strong class="font-weight-bold mt-0">
+                <button class="vote" id="{{ post.id }}_upvote" onclick="submitVote({{ post.id }}, 1)" style="width:100%; border: 0px; background-color: transparent !important;">
+                    <img src="https://img.icons8.com/color/48/000000/triangle-stroked.png"/>
+                </button>
+                <p id="{{ post.id }}_votes" style="text-align: center; margin-bottom: 0px;">{{ post.votes_num() }}</p>
+                <button type="submit" class="vote" id="{{ post.id }}_downvote" onclick="submitVote({{ post.id }}, 0);" style="width:100%; border: 0px; background-color: transparent !important;">
+                    <img src="https://img.icons8.com/color/48/000000/triangle-stroked.png" style="transform: rotate(180deg);"/>
+                </button>
+            </strong><br>
+        </td>       
         <td>
             <p class="date" style="float: right; position: relative; top: 4px;">{{ moment(post.timestamp).fromNow() }}</p>
             <h1 class="post-title" style="margin: 0; font-size: 200%; font-weight: normal; line-height: 140%; padding-bottom: 1px;"><a href="{{ url_for('get_post', postid=post.id) }}">{{ post.title }}</a></h1>
@@ -36,6 +45,7 @@
                 {% endif %}
             {% endif %}
         </td>
+        
     </tr>
 </table>
 

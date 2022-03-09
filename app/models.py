@@ -22,9 +22,10 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
+    post_votes = db.relationship('PostVote', backref='voter', lazy='dynamic')
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
-    user_post_vote = db.relationship('PostVote', backref='author', lazy='dynamic')
+    # user_post_vote = db.relationship('PostVote', backref='author', lazy='dynamic')
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
@@ -191,7 +192,7 @@ class Post(db.Model):
     image_url = db.Column(db.String(100))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    post_votes = db.relationship('PostVote', backref='post_votes', lazy='dynamic')
+    post_votes = db.relationship('PostVote', backref='post', lazy='dynamic')
     
     # Comment relationship 
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
@@ -268,13 +269,26 @@ class Post(db.Model):
     def downvote(self):
         # downvotes += 1
         pass
+    
+    def get_votes(self):
+        all_votes = self.post_votes.all()
+        upvotes = 0
+        downvotes = 0
+        for vote in all_votes:
+            if vote.upvote:
+                upvotes += 1
+            else:
+                downvotes += 1
+        return upvotes, downvotes
+    
+    def votes_num(self):
+        upvotes, downvotes = self.get_votes()
+        return upvotes - downvotes
 
 class PostVote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User', backref=db.backref('user_post_votes'))
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
-    post = db.relationship('Post', backref=db.backref('all_post_votes'))
     upvote = db.Column(db.Boolean, nullable = False)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
@@ -283,4 +297,4 @@ class PostVote(db.Model):
             vote = 'Up'
         else:
             vote = 'Down'
-        return '<Vote - {}, from {} for {}>'.format(vote, self.user.username, self.post.header)
+        return '<Vote - {}, from {} for {}>'.format(vote, self.voter.username, self.post.title)

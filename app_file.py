@@ -1,6 +1,6 @@
 from app import app, db
 from app.models import User, Post, School, Comment
-from app.models import User, Post, School, \
+from app.models import User, Post, PostVote, School, \
     CourseGroup, Course, Unit, SubUnit, Subject, Topic, \
         CourseGroupTag, CourseTag, UnitTag, SubUnitTag, SubjectTag
 
@@ -11,6 +11,7 @@ def make_shell_context():
         'db': db,
         'User': User,
         'Post': Post,
+        'PostVote': PostVote,
         'School': School,
         'CourseGroup': CourseGroup,
         'Course': Course,

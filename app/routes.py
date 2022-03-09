@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from numpy import ALLOW_THREADS
-from flask import render_template, flash, redirect, url_for, request, send_from_directory
+from flask import render_template, flash, redirect, url_for, request, send_from_directory, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
 from werkzeug.utils import secure_filename
@@ -9,7 +9,7 @@ from app import app, db
 from app.files import validate_file
 from app.forms import AddCommentForm, LoginForm, RegistrationForm, EditProfileForm, \
     EmptyForm, PostForm, ResetPasswordRequestForm, ResetPasswordForm
-from app.models import User, Post, Comment, School, \
+from app.models import User, Post, PostVote, Comment, School, \
     CourseGroup, Course, Unit, SubUnit, Subject, Topic, \
         CourseGroupTag, CourseTag, UnitTag, SubUnitTag, SubjectTag
 from app.tags import get_tag_choices, group_classes, group_colors, write_tag_choices
@@ -82,11 +82,11 @@ def index():
     page = request.args.get('page', 1, type=int)
     posts = followed_posts.paginate(
         page, app.config['POSTS_PER_PAGE'], False)
-    print(posts)
     next_url = url_for('index', page=posts.next_num) \
         if posts.has_next else None
     prev_url = url_for('index', page=posts.prev_num) \
         if posts.has_prev else None
+    # print(posts.items)
     return render_template('index.html', title='Home', form=form,
                            posts=posts.items, next_url=next_url,
                            all_tags=post_tags, tag_colors=group_colors,
@@ -284,24 +284,32 @@ def database():
         schools=School.query.all()
     )
 
-@app.route('/_post_vote/<post_id>/<action_vote>', methods=['GET'])
+@app.route('/_post_vote/<post_id>/<action_vote>', methods=['GET', 'POST'])
 @login_required
 def _post_vote(post_id, action_vote):
     post = Post.query.filter_by(id = post_id).first_or_404()
     vote = PostVote.query.filter_by(
-        user = current_user,
-        post = post).first()
-    if vote:
-        if vote.upvote != bool(int(action_vote)):
-            vote.upvote = bool(int(action_vote))
-            db.session.commit()
-            return redirect(url_for('main._post', post_id = post.id))
-        else:
-            flash('You already vote for this post')
-            return redirect(url_for('main._post', post_id = post.id))
+        user_id = current_user.id,
+        post_id = post_id).first()
+    upvote = bool(int(action_vote))
+    if vote is not None:
+        print("ALREADY VOTED")
+        vote.upvote = upvote
+        vote.timestamp = datetime.utcnow()
+        db.session.commit()
+        # return redirect(url_for('main._post', post_id = post.id))
+    else:
+        vote = PostVote(
+            user_id=current_user.id,
+            post_id=post_id,
+            upvote=upvote
+            )
+        db.session.add(vote)
+        db.session.commit()
+        # flash('You already vote for this post')
+        # return redirect(url_for('main._post', post_id = post.id))
 
-    vote = PostVote(user = current_user, post = post, upvote = bool(int(action_vote)))
-    db.session.add(vote)
-    db.session.commit()
-    flash('Thx for voting')
-    return redirect(url_for('main._post', post_id = post.id))
+    # flash('Thx for voting')
+    votes = post.votes_num()
+    print(f"#VOTED {votes}")
+    return jsonify({'votes': votes})

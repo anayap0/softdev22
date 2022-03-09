@@ -52,4 +52,5 @@
 {% block scripts %}
     {{ super() }}
     {{ moment.include_moment() }}
+    <script src="{{ url_for('static', filename='scripts/base.js') }}"></script>
 {% endblock %}

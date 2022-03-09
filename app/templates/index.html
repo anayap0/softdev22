@@ -60,3 +60,7 @@
         </ul>
     </nav>
 {% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/voting.js') }}"></script>
+{% endblock %}
