@@ -1,3 +1,4 @@
+from numpy import number
 from app.models import CourseGroup, Course, Unit, SubUnit, School, Subject, Topic
 from app import db
 
@@ -151,6 +152,42 @@ subjects_and_courses= {
     # },
 }
 
+courses_and_units = {
+    'AP Calculus AB' : {
+        1: "Limits and Continuity",
+        2: "Differentiation: Definition and Fundamental Properties",
+        3: "Differentiation: Composite, Implicit, and Inverse Functions",
+        4: "Contextual Applications of Differentiation",
+        5: "Analytical Applications of Differentiation",
+        6: "Integration and Accumulation of Change",
+        7: "Differential Equations",
+        8: "Applications of Integration"
+    },
+    'AP Calculus BC': {
+        1: "Limits and Continuity",
+        2: "Differentiation: Definition and Fundamental Properties",
+        3: "Differentiation: Composite, Implicit, and Inverse Functions",
+        4: "Contextual Applications of Differentiation",
+        5: "Analytical Applications of Differentiation",
+        6: "Integration and Accumulation of Change",
+        7: "Differential Equations",
+        8: "Applications of Integration",
+        9: "Parametric Equations, Polar Coordinates, and Vector-Valued Functions",
+        10: "Infinite Sequences and Series"
+    },
+    'AP Statistics': {
+        1: "Exploring One-Variable Data",
+        2: "Exploring Two-Variable Data",
+        3: "Collecting Data",
+        4: "Probability, Random Variables, and Probability Distributions",
+        5: "Sampling Distributions",
+        6: "Inference for Categorical Data: Proportions",
+        7: "Inference for Quantitative Data: Means",
+        8: "Inference for Categorical Data: Chi-Square",
+        9: "Inference for Quantitative Data: Slopes"
+    }
+}
+
 def add_course_groups(id_group_list):
     for id, course_group in id_group_list:
         existing_course = CourseGroup.query.filter_by(name=course_group).first()
@@ -181,5 +218,24 @@ def add_courses_by_subject(subjects_and_courses):
                     db.session.add(new_course)
                     db.session.commit()
 
+def add_units_by_course(courses_and_units):
+    for course_name, units_info in courses_and_units.items():
+        course = Course.query.filter_by(name=course_name).first()
+        course_id = course.id
+        for unit_num, unit_name in units_info.items():
+            existing_unit = Unit.query.filter_by(number=unit_num, course_id=course_id).first()
+            if existing_unit is None:
+                new_unit = Unit(
+                    number=unit_num,
+                    name=unit_name,
+                    course_id=course_id
+                )
+                db.session.add(new_unit)
+            else:
+                existing_unit.name = unit_name
+    db.session.commit()
+
+
 add_course_groups(course_groups)
 add_courses_by_subject(subjects_and_courses)
+add_units_by_course(courses_and_units)
