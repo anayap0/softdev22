@@ -1,0 +1,9 @@
+textarea { 
+    resize: vertical;
+    min-height: 122px;
+}
+
+.btn-full {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
