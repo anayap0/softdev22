@@ -1,0 +1,11 @@
+#custom_flash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    max-width: 500px;
+}
+
+body {
+    background-color: aliceblue;
+}

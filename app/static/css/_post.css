@@ -1,0 +1,50 @@
+@media only screen and (max-width: 501px) {
+    #desktop {
+        display: none;
+    }   
+}
+@media only screen and (min-width: 501px) {
+    #mobile {
+        display: none;
+    }   
+}
+
+.post-table {
+    border-radius: 1em;
+    overflow: hidden;
+    border-top: 0em;
+    background-color: #f8f8f8;
+}
+
+.post-info-box {
+    width: 100%;
+    display: flex;
+}
+
+.avatar-box {
+    display: block;
+    width: fit-content;
+    margin-right: 15px;
+}
+
+.post-details-box {
+    display: block;
+    width: 100%;
+}
+
+.votes-num {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.downvote_img {
+    transform: rotate(180deg);
+}
+
+.vote_active {
+    filter: invert(56%) sepia(51%) saturate(5159%) hue-rotate(155deg) brightness(96%) contrast(82%);
+}
+
+.vote:focus {
+	outline: none;
+}

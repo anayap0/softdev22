@@ -1,33 +1,52 @@
-<table class="table table-hover">
+<table class="table table-hover post-table">
     <tr>
         <td width="70px" id="desktop">
-            <a href="{{ url_for('user', username=post.author.username) }}">
-                <img src="{{ post.author.avatar(70) }}" alt='avatar'/>
-            </a><br>
             <strong class="font-weight-bold mt-0">
+                {% set vote = post_votes[post.id] %}
+                {% if vote is defined %}
+                    {% if vote.upvote %}
+                        {% set upvote_class = "vote_active" %}
+                        {% set downvote_class = "" %}
+                    {% else %}
+                        {% set upvote_class = "" %}
+                        {% set downvote_class = "vote_active" %}
+                    {% endif %}
+                {% else %}
+                    {% set upvote_class = "" %}
+                    {% set downvote_class = "" %}
+                {% endif %}
                 <button class="vote" id="{{ post.id }}_upvote" onclick="submitVote({{ post.id }}, 1)" style="width:100%; border: 0px; background-color: transparent !important;">
-                    <img src="https://img.icons8.com/color/48/000000/triangle-stroked.png"/>
+                    <img id="{{ post.id }}_upvote_img" class="upvote_img {{ upvote_class }}" src="{{ url_for('static', filename='images/upvote2.svg') }}" height="40" width="60">
                 </button>
-                <p id="{{ post.id }}_votes" style="text-align: center; margin-bottom: 0px;">{{ post.votes_num() }}</p>
+                <p id="{{ post.id }}_votes" class="votes-num" style="text-align: center; margin-bottom: 0px;">{{ post.votes_num() }}</p>
                 <button type="submit" class="vote" id="{{ post.id }}_downvote" onclick="submitVote({{ post.id }}, 0);" style="width:100%; border: 0px; background-color: transparent !important;">
-                    <img src="https://img.icons8.com/color/48/000000/triangle-stroked.png" style="transform: rotate(180deg);"/>
+                    <img id="{{ post.id }}_downvote_img" class="downvote_img {{ downvote_class }}" src="{{ url_for('static', filename='images/upvote2.svg') }}" height="40" width="60">
                 </button>
             </strong><br>
         </td>       
         <td>
-            <p class="date" style="float: right; position: relative; top: 4px;">{{ moment(post.timestamp).fromNow() }}</p>
-            <h1 class="post-title" style="margin: 0; font-size: 200%; font-weight: normal; line-height: 140%; padding-bottom: 1px;"><a href="{{ url_for('get_post', postid=post.id) }}">{{ post.title }}</a></h1>
-            <div class="post_details" style="padding-bottom: 5px; border-bottom: 1px solid #ddd">
-                <strong style="font-size: 13px">Posted by </strong>
-                <span class="label label-danger"><a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a></span>
-                {% if post_tags|length > 0 %}
-                    <strong style="font-size: 13px">under </strong>
-                    {% for tag_group, tags in post_tags.items() %}
-                            {% for tag in tags %}
-                                <span class="label" style="background-color: {{tag_colors[tag_group]}}; color: black;">{{ tag.source.name }}</span>  <!-- implement when tags  -->
+            <div class="post-info-box">
+                <div class="avatar-box">
+                    <a href="{{ url_for('user', username=post.author.username) }}">
+                        <img src="{{ post.author.avatar(70) }}" alt='avatar'/>
+                    </a>
+                </div>
+                <div class="post-details-box">
+                    <p class="date" style="float: right; position: relative; top: 4px;">{{ moment(post.timestamp).fromNow() }}</p>
+                    <h1 class="post-title" style="margin: 0; font-size: 200%; font-weight: normal; line-height: 140%; padding-bottom: 1px;"><a href="{{ url_for('get_post', postid=post.id) }}">{{ post.title }}</a></h1>
+                    <div class="post_details" style="padding-bottom: 5px; border-bottom: 1px solid #ddd">
+                        <strong style="font-size: 13px">Posted by </strong>
+                        <span class="label label-danger"><a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a></span>
+                        {% if post_tags|length > 0 %}
+                            <strong style="font-size: 13px">under </strong>
+                            {% for tag_group, tags in post_tags.items() %}
+                                    {% for tag in tags %}
+                                        <span class="badge" style="background-color: {{tag_colors[tag_group]}}; color: black;">{{ tag.source.name }}</span>  <!-- implement when tags  -->
+                                    {% endfor %}
                             {% endfor %}
-                    {% endfor %}
-                {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
             </div>
             <p style="margin-top: 12px; font-size:17px">{{ post.body }}</p>
             {% if post.image_url %}
@@ -48,16 +67,3 @@
         
     </tr>
 </table>
-
-<style>
-    @media only screen and (max-width: 501px) {
-        #desktop {
-            display: none;
-        }   
-    }
-    @media only screen and (min-width: 501px) {
-        #mobile {
-            display: none;
-        }   
-    }
-</style>    

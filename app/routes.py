@@ -77,7 +77,12 @@ def index():
     
 
     followed_posts = current_user.followed_posts()
-    post_tags = {post.id : post.get_tags() for post in followed_posts}
+    post_tags = {}
+    post_votes = {}
+    for post in followed_posts:
+        post_tags[post.id] = post.get_tags()
+        post_votes[post.id] = PostVote.query.filter_by(user_id=current_user.id, post_id=post.id).first()
+    
     # print(post_tags)
     page = request.args.get('page', 1, type=int)
     posts = followed_posts.paginate(
@@ -89,7 +94,7 @@ def index():
     # print(posts.items)
     return render_template('index.html', title='Home', form=form,
                            posts=posts.items, next_url=next_url,
-                           all_tags=post_tags, tag_colors=group_colors,
+                           all_tags=post_tags, tag_colors=group_colors, post_votes=post_votes,
                            prev_url=prev_url, office_extensions=app.config["OFFICE_EXTENSIONS"])
 
 
@@ -309,7 +314,6 @@ def _post_vote(post_id, action_vote):
         # flash('You already vote for this post')
         # return redirect(url_for('main._post', post_id = post.id))
 
-    flash('Thx for voting')
     votes = post.votes_num()
     # print(f"#VOTED {votes}")
     return jsonify({'votes': votes})

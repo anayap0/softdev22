@@ -185,7 +185,7 @@ courses_and_units = {
         7: "Inference for Quantitative Data: Means",
         8: "Inference for Categorical Data: Chi-Square",
         9: "Inference for Quantitative Data: Slopes"
-    }
+    },
 }
 
 def add_course_groups(id_group_list):

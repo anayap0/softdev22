@@ -17,10 +17,23 @@ function submitVote(post_id, action_vote) {
         .catch(handleError)
         .then(response => response.json())  
         .then(json => {
+            // Update votes count
             console.log(json);
-            // document.getElementById("demo").innerHTML = JSON.stringify(json)
             vote_displayer = document.getElementById(post_id + "_votes");
             current_votes = parseInt(json['votes']);
             vote_displayer.innerText = current_votes;
-        }) 
+            
+            // Update user vote visually
+            upvote = document.getElementById(post_id + "_upvote_img");
+            downvote = document.getElementById(post_id + "_downvote_img");
+            if (action_vote == 1) {
+                upvote.classList.add("vote_active");
+                downvote.classList.remove("vote_active");
+            }
+            else if (action_vote == 0) {
+                upvote.classList.remove("vote_active");
+                downvote.classList.add("vote_active");
+            }
+
+        })
 }
