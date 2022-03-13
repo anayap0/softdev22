@@ -1,5 +1,5 @@
 <strong class="font-weight-bold mt-0">
-    {% if vote is defined %}
+    {% if vote is not none %}
         {% if vote.upvote %}
             {% set upvote_class = "vote_active" %}
             {% set downvote_class = "" %}
