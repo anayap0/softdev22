@@ -108,10 +108,15 @@ def explore():
         if posts.has_next else None
     prev_url = url_for('explore', page=posts.prev_num) \
         if posts.has_prev else None
+
+    post_tags = {}
+    post_votes = {}
+    for post in Post.query.all():
+        post_tags[post.id] = post.get_tags()
+        post_votes[post.id] = PostVote.query.filter_by(user_id=current_user.id, post_id=post.id).first()
     
-    post_tags = {post.id : post.get_tags() for post in posts.query.all()}
     return render_template('index.html', title='Explore', posts=posts.items,
-                            all_tags=post_tags, tag_colors=group_colors,
+                            all_tags=post_tags, tag_colors=group_colors, post_votes=post_votes,
                             next_url=next_url, prev_url=prev_url, office_extensions=app.config["OFFICE_EXTENSIONS"])
 
 
@@ -265,13 +270,14 @@ def upload(filename):
 def get_post(postid):
     post = Post.query.get(postid)
     tags = post.get_tags_list()
+    user_post_vote = PostVote.query.filter_by(user_id=current_user.id, post_id=post.id).first()
     comment_form = AddCommentForm()
     if request.method == "POST" and comment_form.validate_on_submit(): # TODO: and is signed in 
         comment = Comment(body=comment_form.body.data, post_id=postid, user_id=current_user.id)
         db.session.add(comment)
         db.session.commit()
         flash("Your comment has been added to the post", "success")
-    return render_template('post.html', post=post, form=comment_form, author=current_user, post_tags=tags)
+    return render_template('post.html', post=post, form=comment_form, author=current_user, post_tags=tags, current_vote=user_post_vote)
 
 @app.route('/database')
 def database():

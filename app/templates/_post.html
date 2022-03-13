@@ -1,28 +1,7 @@
 <table class="table table-hover post-table">
     <tr>
         <td width="70px" id="desktop">
-            <strong class="font-weight-bold mt-0">
-                {% set vote = post_votes[post.id] %}
-                {% if vote is defined %}
-                    {% if vote.upvote %}
-                        {% set upvote_class = "vote_active" %}
-                        {% set downvote_class = "" %}
-                    {% else %}
-                        {% set upvote_class = "" %}
-                        {% set downvote_class = "vote_active" %}
-                    {% endif %}
-                {% else %}
-                    {% set upvote_class = "" %}
-                    {% set downvote_class = "" %}
-                {% endif %}
-                <button class="vote" id="{{ post.id }}_upvote" onclick="submitVote({{ post.id }}, 1)" style="width:100%; border: 0px; background-color: transparent !important;">
-                    <img id="{{ post.id }}_upvote_img" class="upvote_img {{ upvote_class }}" src="{{ url_for('static', filename='images/upvote2.svg') }}" height="40" width="60">
-                </button>
-                <p id="{{ post.id }}_votes" class="votes-num" style="text-align: center; margin-bottom: 0px;">{{ post.votes_num() }}</p>
-                <button type="submit" class="vote" id="{{ post.id }}_downvote" onclick="submitVote({{ post.id }}, 0);" style="width:100%; border: 0px; background-color: transparent !important;">
-                    <img id="{{ post.id }}_downvote_img" class="downvote_img {{ downvote_class }}" src="{{ url_for('static', filename='images/upvote2.svg') }}" height="40" width="60">
-                </button>
-            </strong><br>
+            {% include "_vote.html" %}<br>
         </td>       
         <td>
             <div class="post-info-box">

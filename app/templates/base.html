@@ -17,15 +17,15 @@
     
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('explore') }}">Explore</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}"><span class="glyphicon glyphicon-envelope"></span>Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('explore') }}"><span class="glyphicon glyphicon-envelope"></span>Explore</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_anonymous %}
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}"><span class="glyphicon glyphicon-envelope"></span>Login</a></li>
                 {% else %}
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('user', username=current_user.username) }}">Profile</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-envelope"></span>Logout</a></li>
                 {% endif %}
             </ul>
 

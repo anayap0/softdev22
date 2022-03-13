@@ -1,14 +1,20 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
-{% block app_content %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/_post.css') }}">
+{% endblock %}
 
+{% block app_content %}
 <table class="table table-hover">
     <tr>
         <td id='desktop' width="75px">
-            <a href="{{ url_for('user', username=post.author.username) }}">
+            <a class="avatar-large" href="{{ url_for('user', username=post.author.username) }}">
                 <img src="{{ post.author.avatar(100) }}" alt='avatar'/>
-            </a>
+            </a><br>
+            {% set vote = current_vote %}
+            {% include "_vote.html" %}
         </td>
         <td>
             <p class="date" style="float: right; position: relative; top: 8px; font-size: 130%">{{ moment(post.timestamp).fromNow() }}</p>
@@ -61,5 +67,6 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="url_for('static/scripts' filename='voting.js')"></script>
+    {{ super() }}
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/voting.js') }}"></script>
 {% endblock %}

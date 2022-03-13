@@ -27,6 +27,10 @@
     margin-right: 15px;
 }
 
+.avatar-large {
+    display: block;
+}
+
 .post-details-box {
     display: block;
     width: 100%;
