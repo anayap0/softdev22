@@ -5,6 +5,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length
 from app.models import User
+from flask import request
 
 
 class LoginForm(FlaskForm):
@@ -77,3 +78,13 @@ class PostForm(FlaskForm):
 class AddCommentForm(FlaskForm):
     body = StringField("Comment", validators=[DataRequired(), Length(min=0, max=100)])
     submit = SubmitField("Post")
+
+class SearchForm(FlaskForm):
+    q = StringField(_l('Search'), validators=[DataRequired()])
+
+    def __init__(self, *args, **kwargs):
+        if 'formdata' not in kwargs:
+            kwargs['formdata'] = request.args
+        if 'meta' not in kwargs:
+            kwargs['meta'] = {'csrf': False}
+        super(SearchForm, self).__init__(*args, **kwargs)
