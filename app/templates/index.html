@@ -45,15 +45,17 @@
                                 <span class="errorSpan">[{{ error }}]</span>
                             {% endfor %}
                         </div><br>
-                        <div>
-                            {{ form.tags.label }}<br>
-                            {% for choice in form.tags.choices %}
-                                <div class="form-check">
-                                    <input type="checkbox" id="{{ loop.index }}" value="{{ choice[0] }}" name="tags">
-                                    <label for="{{ loop.index }}">{{ choice[1] }}</label><br>
-                                </div>
-                            {% endfor %}
-                        </div><br>
+                        <label for="search">Tags</label><br>
+                        <div class='searchBox'>
+                            <select name="tags" placeholder="Choose some tags" id="search" multiple="multiple">
+                                {{ form.tags.label }}<br>
+                                {% for choice in form.tags.choices %}
+                                    <div class="form-check">
+                                        <option type="text" name="tags" id="{{ loop.index }}" value="{{ choice[0] }}">{{ choice[1] }}</option>
+                                    </div>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -90,6 +92,13 @@
 {% block scripts %}
     {{super()}}
     <script>
+
+        // For Tags select
+        $(document).ready(function(){
+            $("#search").selectize();
+        });
+
+
         $('#exampleModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
@@ -130,4 +139,9 @@
     });
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='scripts/voting.js') }}"></script>
+    <!-- selectize and its dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sifter/0.5.4/sifter.min.js" integrity="sha512-B60IUvYpG4cibCeQ30J8k/+qtN+fxKAIENb3DL2DVdzIt76IDIynAt92chPEwlCuKejOt//+OZL61i1xsvCIDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microplugin/0.0.3/microplugin.min.js" integrity="sha512-7amIsiQ/hxbdPNawBZwmWBWPiwQRNEJlxTj6eVO+xmWd71fs79Iydr4rYARHwDf0rKHpysFxWbj64fjPRHbqfA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/selectize.min.js" integrity="sha512-JiDSvppkBtWM1f9nPRajthdgTCZV3wtyngKUqVHlAs0d5q72n5zpM3QMOLmuNws2vkYmmLn4r1KfnPzgC/73Mw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.css" integrity="sha512-85w5tjZHguXpvARsBrIg9NWdNy5UBK16rAL8VWgnWXK2vMtcRKCBsHWSUbmMu0qHfXW2FVUDiWr6crA+IFdd1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 {% endblock %}
