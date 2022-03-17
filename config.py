@@ -16,6 +16,6 @@ class Config(object):
     POSTS_PER_PAGE = 25
     UPLOAD_EXTENSIONS = ['.jpg', '.png', '.gif', '.pdf', '.docx', 'zip', '.pptx', '.xlsx'] # for file upload   TODO: choose allowed extensions (word docs are seen as zip files?!?!?!)
     OFFICE_EXTENSIONS = ['.docx', '.pptx', '.xlsx']
-    MAX_CONTENT_LENGTH = 1024 * 1024 # for file upload
+    MAX_CONTENT_LENGTH = 8000 * 8000 # for file upload
     UPLOAD_PATH = './app/uploads' # for file upload
     UPLOAD_FOLDER = 'uploads' # for file upload
