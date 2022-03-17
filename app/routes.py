@@ -203,8 +203,7 @@ def user(username):
         if posts.has_prev else None
     form = EmptyForm()
     return render_template('user.html', user=user, posts=posts.items,
-                           next_url=next_url, prev_url=prev_url, form=form, office_extensions=app.config["OFFICE_EXTENSIONS"])
-
+                           next_url=next_url, prev_url=prev_url, form=form, office_extensions=app.config["OFFICE_EXTENSIONS"], vote=PostVote)
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
